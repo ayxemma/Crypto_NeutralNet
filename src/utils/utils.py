@@ -1,12 +1,13 @@
-import pandas as pd
 import pickle
+
+import matplotlib.pyplot as plt
+import pandas as pd
 
 
 def saveData(data, file):
     with open(file, 'wb') as handle:
         pickle.dump(data, handle, protocol=pickle.HIGHEST_PROTOCOL)
-    
-    
+
 
 def plot_roc_curve(df, target, plotname):
     fpr, tpr, thres = roc_curve(df[target], df['pred_prob'])

@@ -1,3 +1,15 @@
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+from sklearn.ensemble import RandomForestRegressor
+
+import gc
+import pandas as pd
+import os
+import matplotlib.backends.backend_pdf as backend_pdf
+import numpy as np
+import datetime
+from sklearn.model_selection import GridSearchCV
+from functools import reduce
 
 
 class BlockingTimeSeriesSplit():
@@ -5,6 +17,7 @@ class BlockingTimeSeriesSplit():
     method take from -
     https://hub.packtpub.com/cross-validation-strategies-for-time-series-forecasting-tutorial/
     """
+
     def __init__(self, n_splits):
         self.n_splits = n_splits
 
@@ -78,5 +91,3 @@ def model_cross_validation():
     df_test['target_label'] = (df_test[target] > 0.03) * 1.0
 
     print(classification_report(df_test['target_label'], df_test['pred_label']))
-
-

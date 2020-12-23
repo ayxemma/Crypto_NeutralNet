@@ -1,3 +1,23 @@
+from tensorflow.keras.models import Model
+from tensorflow.keras import regularizers, optimizers
+from tensorflow.keras.models import load_model
+from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, CSVLogger
+from tensorflow.keras.backend import clear_session
+
+import numpy as np
+from sklearn import preprocessing
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+
+import gc
+import pickle
+import pandas as pd
+import os
+import matplotlib.pyplot as plt
+import numpy as np
+import datetime
+
+
 def lstm_prediction():
     """
     start the burn in with a year's data - 9 month and 3 month split
@@ -115,8 +135,10 @@ def lstm_prediction():
     del model
     gc.collect()
 
+
 def read_model_log(mdl_nm, train_period, n_period):
     log = pd.read_csv(f'../models/{mdl_nm}_train_split{train_period}vs{n_period - train_period}.log')
+
 
 def create_lstm_model(n_lookback, n_features, lr, init='glorot_normal'):
     dropout_pct = 0.40

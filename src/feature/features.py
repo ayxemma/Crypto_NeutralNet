@@ -1,6 +1,7 @@
+import numpy as np
 import pandas as pd
 import talib as ta
-import numpy as np
+
 
 def build_talib_factors(df_ftr, tp=10):
     tporg = tp
@@ -17,7 +18,6 @@ def build_talib_factors(df_ftr, tp=10):
 
     # overlap
     df_ftr['OBV'] = ta.OBV(df_ftr.close.values, df_ftr.volume.values)
-
 
     for i in range(len(rtn_divisor)):
         tp = int(tporg // rtn_divisor[i])
@@ -46,7 +46,6 @@ def build_talib_factors(df_ftr, tp=10):
                                                             slowd_matype=0)  # slowd is slow sto, slowk is fast sto
         df_ftr['slowj'] = (3 * df_ftr['slowd' + x]) - (2 * df_ftr['slowk' + x])
 
-
         df_ftr['fastk' + x], df_ftr['fastd' + x] = ta.STOCHF(df_ftr.high.values, df_ftr.low.values, df_ftr.close.values,
                                                              fastk_period=tp, fastd_period=tp // mul, fastd_matype=0)
 
@@ -63,14 +62,12 @@ def build_talib_factors(df_ftr, tp=10):
         df_ftr['ADX' + x] = ta.ADX(df_ftr.high.values, df_ftr.low.values, df_ftr.close.values, timeperiod=tp)
         df_ftr['ADXR' + x] = ta.ADXR(df_ftr.high.values, df_ftr.low.values, df_ftr.close.values, timeperiod=tp)
 
-
         # MACD
         df_ftr['MACD' + x], df_ftr['macdsignal' + x], df_ftr['macdhist' + x] = ta.MACD(df_ftr.close.values,
                                                                                        fastperiod=tp,
                                                                                        slowperiod=round(tp * 2),
                                                                                        signalperiod=tp // mul)
         # http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:moving_average_convergence_divergence_macd
-
 
         # Aroon
         # https://tradingsim.com/blog/aroon-indicator/
@@ -87,7 +84,6 @@ def build_talib_factors(df_ftr, tp=10):
                                    timeperiod=tp)
         df_ftr['MFI_slope' + x] = ta.LINEARREG_SLOPE(df_ftr['MFI' + x].values, timeperiod=tp)
 
-
         # MACD with controllable MA type
         df_ftr['macdEXT' + x], df_ftr['macdEXTsignal' + x], df_ftr['macdEXThist' + x] = ta.MACDEXT(df_ftr.close.values,
                                                                                                    fastperiod=tp // mul,
@@ -100,7 +96,6 @@ def build_talib_factors(df_ftr, tp=10):
 
         df_ftr['macdFIX' + x], df_ftr['macdFIXsignal' + x], df_ftr['macdFIXhist' + x] = ta.MACDFIX(df_ftr.close.values,
                                                                                                    signalperiod=9)
-
 
         # Stochastic Relative Strength Index
         df_ftr['fastkRSI' + x], df_ftr['fastdRSI' + x] = ta.STOCHRSI(df_ftr.close.values, timeperiod=tp,
@@ -119,10 +114,7 @@ def build_talib_factors(df_ftr, tp=10):
         df_ftr['AD_SLOPE' + x] = ta.LINEARREG_SLOPE(df_ftr['AD'].values, timeperiod=tp)
         df_ftr['AD_SLOPE_std' + x] = df_ftr['AD_SLOPE' + x].rolling(int(tp * 20)).std()
 
-
-
         df_ftr['OBV_slope' + x] = ta.LINEARREG_SLOPE(df_ftr['OBV'].values, timeperiod=tp)
-
 
         # cycle
         df_ftr['HT_DCPERIOD' + x] = df_ftr['HT_DCPERIOD'].pct_change(periods=int(tp)).values
